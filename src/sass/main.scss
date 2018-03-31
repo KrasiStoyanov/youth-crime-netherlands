@@ -1,0 +1,15 @@
+@import 'functions';
+@import 'variables';
+
+@import 'variables/main';
+
+@import 'bootstrap';
+
+// Global styles
+@import 'base/main';
+
+// Components
+@import 'components/main';
+
+// Layout components - header, footer, etc.
+@import 'layout/main';

@@ -1,0 +1,23 @@
+#particles-header {
+	min-width: 1px;
+	max-width: 840px;
+	min-height: 1px;
+	max-height: 555;
+}
+
+.particles {
+	.outlined {
+	    fill: transparent;
+	    stroke: #E52941;
+	    stroke-width: 2;
+	    stroke-miterlimit: 10;
+	}
+
+	.to-fill {
+		transition: fill .3s ease-in-out;
+	}
+
+	.filled {
+		fill: #E52941;
+	}
+}
