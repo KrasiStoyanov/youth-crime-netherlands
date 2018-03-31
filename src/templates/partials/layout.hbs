@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quizco - {{title}}</title>
+    <link href="https://fonts.googleapis.com/css?family=Karla|Poppins:700&amp;subset=latin-ext" rel="stylesheet">
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+
+<body>
+    {{> header}}
+	
+	<div id="content-wrapper">
+	    {{#block 'body'}}
+	    {{/block}}
+	</div>
+
+	{{> footer}}
+
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="./js/main.js"></script>
+</body>
+
+</html>
