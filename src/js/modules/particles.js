@@ -23,7 +23,9 @@ function animateParticles (selector, duration, loop, delay) {
         	return i * delay;
         },
         complete: () => {
-        	$(selector).filter('.to-fill').addClass('filled');
+        	let particles = $(selector).filter('.to-fill');
+
+        	particles.addClass('filled');
         }
     });
 }
