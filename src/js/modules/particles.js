@@ -3,7 +3,7 @@
 import anime from 'animejs';
 import * as particleConstants from '../constants/particleConstants';
 
-function animateParticles (selector, duration, loop, delay) {
+function animate (selector, duration, loop, delay) {
 	duration = duration ? duration : particleConstants.defaultValues.duration;
 	loop = loop ? loop : particleConstants.defaultValues.loop;
 	delay = delay ? delay : particleConstants.defaultValues.delay;
@@ -31,5 +31,5 @@ function animateParticles (selector, duration, loop, delay) {
 }
 
 export {
-	animateParticles
+	animate
 };

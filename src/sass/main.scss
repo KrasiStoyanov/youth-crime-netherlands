@@ -3,11 +3,13 @@
 @import 'functions';
 @import 'variables';
 
-
 @import 'bootstrap';
 
 // Global styles
 @import 'base/main';
+
+// Utilities
+@import 'utilities/main';
 
 // Components
 @import 'components/main';
