@@ -1,7 +1,18 @@
 .btn {
-	&.btn-light {
-		&.btn-transparent {
-			background-color: transparent;
-		}
+	outline: 0;
+}
+
+.btn-outline-light {
+	@include button-outline-variant(rgba(255, 255, 255, .7), white, transparent, white);
+	border-color: rgba(255, 255, 255, .1);
+	
+	&.btn-circle {
+		border-radius: 50%;
 	}
+}
+
+.btn-sm {
+	width: $btn-line-height-sm;
+	height: $btn-line-height-sm;
+	font-size: $small-font-size;
 }

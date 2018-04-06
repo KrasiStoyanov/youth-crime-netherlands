@@ -1,0 +1,21 @@
+#firework-path {
+	position: relative;
+	right: 0;
+	left: 0;
+	margin: auto;
+
+	#firework {
+		opacity: 0;
+		position: absolute;
+		top: 40px;
+		left: -40px;
+	}
+
+	.content-wrapper {
+		position: relative;
+		// overflow: hidden;
+		left: 50%;
+		transform: translateX(-50%);
+		display: inline-block;
+	}
+}

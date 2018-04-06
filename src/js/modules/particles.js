@@ -22,6 +22,9 @@ function animate (selector, duration, loop, delay) {
 
         	return i * delay;
         },
+        begin: () => {
+            $(selector).css('opacity', 1);
+        },
         complete: () => {
         	let particles = $(selector).filter('.to-fill');
 

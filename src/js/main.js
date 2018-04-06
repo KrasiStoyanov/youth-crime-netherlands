@@ -1,29 +1,32 @@
 'use strict';
 
+import anime from 'animejs';
+import * as header from './modules/header';
 import * as particles from './modules/particles';
-import * as backgroundWaves from './modules/backgroundWaves';
 import * as particleConstants from './constants/particleConstants';
 
-$(document).ready(() => {
+$(document).ready(() => {	
+	header.initialize();
+	
 	// Particles
 	let headerParticles = $('#particles-header .particles .particle').get();
-
 	particles.animate(headerParticles);
-	
-	// Backgrund waves
-	let windowWidth = $(window).width();
-	let windowHeight = $(window).height();
-	let backgroundSolid = $('#background-solid');
-	let backgroundWavesParentSelector = $('#background-waves');
-	let backgroundWavesSelector = $(backgroundWavesParentSelector).find('.waves');
 
-	backgroundWavesParentSelector.attr('viewBox', `0 0 ${windowWidth} ${windowHeight}`);
+	let path = anime.path('#firework-path #path path');
+	let fireworkParticles = $('#firework-particles .particles .particle').get();
 
-	backgroundWaves.responsive(backgroundWavesParentSelector);
-	backgroundWaves.initialize(backgroundSolid, backgroundWavesSelector);
-
-	$(window).resize(() => {
-		let backgroundWavesParentSelector = $('#background-waves');
-		backgroundWaves.responsive(backgroundWavesParentSelector)
+	let motionPath = anime({
+		targets: '#firework-path #firework',
+		translateX: path('x'),
+		translateY: path('y'),
+		scale: [0, 1],
+		opacity: [0, 1],
+		rotate: path('angle'),
+		easing: 'easeInOutQuart',
+		duration: 3000,
+		loop: false,
+		complete: () => {
+			particles.animate(fireworkParticles);
+		}
 	});
 });

@@ -1,0 +1,32 @@
+@font-face {
+  font-family: 'fireworks';
+  src:  url('../fonts/fireworks.eot?hoe11l');
+  src:  url('../fonts/fireworks.eot?hoe11l#iefix') format('embedded-opentype'),
+    url('../fonts/fireworks.ttf?hoe11l') format('truetype'),
+    url('../fonts/fireworks.woff?hoe11l') format('woff'),
+    url('../fonts/fireworks.svg?hoe11l#fireworks') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+i {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'fireworks' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-arrow-down:before {
+  content: "\e90b";
+}
+.icon-arrow-up:before {
+  content: "\e910";
+}
