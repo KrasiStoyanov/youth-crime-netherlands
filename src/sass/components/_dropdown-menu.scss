@@ -1,0 +1,28 @@
+.dropdown-menu {
+	min-width: 200px;
+	border: 0;
+	border-radius: $border-radius;
+	box-shadow: 0 4px 64px 0 transparentize($black, 0.9);
+	display: block;
+	opacity: 0;
+	visibility: hidden;
+	@include transition();
+
+	.dropdown-item:not(:last-child) {
+		border-bottom: 1px solid transparentize($black, .95);
+	}
+
+	.dropdown-item {
+		@include transition();
+
+		&:hover,
+		&:active,
+		&.active,
+		&:active:focus,
+		&:focus,
+		&.focus, {
+			color: $danger;
+			background-color: transparent;
+		}
+	}
+}

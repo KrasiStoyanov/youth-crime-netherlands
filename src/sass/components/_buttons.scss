@@ -16,3 +16,8 @@
 	height: $btn-line-height-sm;
 	font-size: $small-font-size;
 }
+
+.btn-md {
+	@include button-size($spacer * 3, $spacer * 5, $h5-font-size, 1, 50px);
+	min-width: 180px;
+}

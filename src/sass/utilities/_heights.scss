@@ -1,0 +1,6 @@
+@each $height, $value in $heights {
+	.h-#{$height} {
+		height: $value;
+		max-height: $value;
+	}
+}

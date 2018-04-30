@@ -1,0 +1,21 @@
+.dropdown {
+	&.show {
+		.dropdown-toggle {
+			i {
+				transform: rotate(-180deg);
+			}
+		}
+
+		.dropdown-menu {
+			opacity: 1;
+			visibility: visible;
+		}
+	}
+}
+
+.dropdown-toggle {
+	i {
+		display: inline-block;
+		@include transition(transform .2s ease-in-out);
+	}
+}
