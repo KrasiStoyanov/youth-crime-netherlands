@@ -10,8 +10,45 @@ import * as fireworks from './data/fireworks';
 
 import * as particleConstants from './constants/particleConstants';
 import * as fireworkConstants from './constants/fireworkConstants';
+import * as ageConstants from './constants/ageConstants';
+import * as genderConstants from './constants/genderConstants';
+import * as ethnicityConstants from './constants/ethnicityConstants';
+import * as periodConstants from './constants/periodConstants';
 
 $(document).ready(() => {
+	$.ajax({
+		type: 'GET',
+		dataType: 'json',
+		url: 'https://opendata.cbs.nl/ODataApi/odata/71930ned/Leeftijd',
+		success: (data) => {
+			data = data.value;
+
+			ageConstants.save(data);
+		}
+	});
+
+	$.ajax({
+		type: 'GET',
+		dataType: 'json',
+		url: 'https://opendata.cbs.nl/ODataApi/odata/71930ned/Geslacht',
+		success: (data) => {
+			data = data.value;
+
+			genderConstants.save(data);
+		}
+	});
+
+	$.ajax({
+		type: 'GET',
+		dataType: 'json',
+		url: 'https://opendata.cbs.nl/ODataApi/odata/71930ned/Herkomstgroeperingen',
+		success: (data) => {
+			data = data.value;
+
+			ethnicityConstants.save(data);
+		}
+	});
+
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
@@ -19,7 +56,7 @@ $(document).ready(() => {
 		success: (data) => {
 			data = data.value;
 
-			fireworkConstants.savePeriods(data);
+			periodConstants.save(data);
 		}
 	});
 

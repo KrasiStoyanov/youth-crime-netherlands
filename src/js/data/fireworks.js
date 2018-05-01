@@ -1,6 +1,10 @@
 'use strict';
 
 import * as fireworkConstants from '../constants/fireworkConstants';
+import * as ageConstants from '../constants/ageConstants';
+import * as genderConstants from '../constants/genderConstants';
+import * as ethnicityConstants from '../constants/ethnicityConstants';
+import * as periodConstants from '../constants/periodConstants';
 
 let fireworks = [];
 let totalNumberOfViolations = 0;
@@ -10,7 +14,11 @@ function saveData (data) {
 }
 
 function forThePastNYears (years) {
-	let periods = fireworkConstants.getPeriods();
+	let ages = ageConstants.get();
+	let genders = genderConstants.get();
+	let ethnicities = ethnicityConstants.get();
+	let periods = periodConstants.get();
+
 	let numberOfViolations = 0;
 	let periodsArray = [];
 
@@ -22,9 +30,9 @@ function forThePastNYears (years) {
 	}
 
 	fireworks.map((firework, index) => {
-		if (parseInt(firework[fireworkConstants.keys.age]) === 99) {
-            if (parseInt(firework[fireworkConstants.keys.sex]) === 1100) {
-                if (parseInt(firework[fireworkConstants.keys.ethnicity]) === 1000) {
+		if (parseInt(firework[fireworkConstants.keys.age]) === ages.total) {
+            if (parseInt(firework[fireworkConstants.keys.sex]) === genders.total) {
+                if (parseInt(firework[fireworkConstants.keys.ethnicity]) === ethnicities.total) {
                 	let fireworkPeriod = firework[fireworkConstants.keys.period];
                 	let isInPeriodRange = periodsArray.indexOf(fireworkPeriod);
                 	if (isInPeriodRange > -1) {
