@@ -74,7 +74,7 @@ $(document).ready(() => {
     	animateAmountOfViolationsBasedOnPastYears(fireworkConstants.initialPassedYears);
     });
 
-    $('#change-years a').click((e) => {
+    $('#total-number-of-violations .change-years a').click((e) => {
     	e.preventDefault();
 
     	let element = $(e.currentTarget);
@@ -112,33 +112,53 @@ $(document).ready(() => {
 		}
 	});
 
-	let ctx = document.getElementById("myChart").getContext('2d');
+	let ctx = $('#by-age-chart')[0].getContext('2d');
 	let myLineChart = new Chart(ctx, {
 		type: 'line',
-		data: {labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+		data: {
+			labels: ['', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', ''],
 		    datasets: [{
-		        label: '# of Votes',
-		        data: [12, 19, 3, 5, 2, 3],
-		        backgroundColor: [
-		            'rgba(255, 99, 132, 0.2)',
-		            'rgba(54, 162, 235, 0.2)',
-		            'rgba(255, 206, 86, 0.2)',
-		            'rgba(75, 192, 192, 0.2)',
-		            'rgba(153, 102, 255, 0.2)',
-		            'rgba(255, 159, 64, 0.2)'
-		        ],
-		        borderColor: [
-		            'rgba(255,99,132,1)',
-		            'rgba(54, 162, 235, 1)',
-		            'rgba(255, 206, 86, 1)',
-		            'rgba(75, 192, 192, 1)',
-		            'rgba(153, 102, 255, 1)',
-		            'rgba(255, 159, 64, 1)'
-		        ],
-		        borderWidth: 1
+		        data: [0, 5210, 4170, 3510, 2630, 2230, 1930, 1970, 1880, 1550, 1170, 0],
+		        label: '',
+		        xAxisID: '',
+		        yAxisID: '',
+		        spanGaps: false,
+		        steppedLine: false,
+		        backgroundColor: 'transparent',
+		        pointRadius: 7,
+		        pointBackgroundColor: '#c3d4db',
+		        pointBorderWidth: 0,
+		        pointBorderColor: '#c3d4db',
+		        pointHoverRadius: 10,
+		        pointHoverBackgroundColor: '#e52941',
+		        pointHoverBorderColor: '#e52941',
+		        borderColor: '#c3d4db',
+		        borderWidth: 4
 		    }]
+		},
+		options: {
+			legend: {
+				display: false,
+			},
+			scales: {
+				xAxes: [{
+					display: true,
+					gridLines: {
+						display: false,
+					}
+				}],
+				yAxes: [{
+					display: false,
+					ticks: {
+						max: 6000,
+						min: 0
+					}
+				}]
+			}
 		}
 	});
+
+	console.log(myLineChart)
 });
 
 function animateAmountOfViolationsBasedOnPastYears (years) {

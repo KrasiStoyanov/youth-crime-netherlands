@@ -37,6 +37,7 @@ function forThePastNYears (years) {
                 	let isInPeriodRange = periodsArray.indexOf(fireworkPeriod);
                 	if (isInPeriodRange > -1) {
 	                    var currentNumberOfViolations = firework[fireworkConstants.keys.fireworks];
+	                    console.log(currentNumberOfViolations)
 
 	                    numberOfViolations += currentNumberOfViolations;
                 	}

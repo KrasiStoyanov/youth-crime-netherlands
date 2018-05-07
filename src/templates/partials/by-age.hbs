@@ -1,1 +1,25 @@
-<canvas id="myChart" width="400" height="400"></canvas>
+<div id="by-age">
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<div class="d-flex d-row align-items-center mb-7">
+					<h1 class="display-4 mr-auto">Violations by age</h1>
+					<div class="change-years dropdown">
+						<button class="btn btn-md btn-outline-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<span>Past <span class="amount-of-years">10</span> years<span>
+							<small class="ml-1"><i class="icon-arrow-down"></i></small>
+						</button>
+						<div class="dropdown-menu mt-3 mb-3 p-0" aria-labelledby="change-years">
+							<a class="dropdown-item pt-3 pr-4 pb-3 pl-4" href="#" data-value="3"><small>Past 3 years</small></a>
+							<a class="dropdown-item pt-3 pr-4 pb-3 pl-4" href="#" data-value="5"><small>Past 5 years</small></a>
+							<a class="dropdown-item pt-3 pr-4 pb-3 pl-4 active" href="#" data-value="10"><small>Past 10 years</small></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="chart-container">
+		<canvas id="by-age-chart" style="height: 400px;"></canvas>
+	</div>
+</div>
