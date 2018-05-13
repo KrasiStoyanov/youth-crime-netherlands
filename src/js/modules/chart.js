@@ -14,7 +14,7 @@ function initializeChart () {
 	updatedData = updateData(years, age);
 	let data = updatedData.data;
 	let labels = updatedData.labels;
-	let roundToThousand = updatedData.roundToThousand;
+	let roundMaxNumberToHigher = updatedData.roundMaxNumberToHigher;
 
 	ctx = $('#by-age-chart')[0].getContext('2d');
 	options = {
@@ -26,14 +26,18 @@ function initializeChart () {
 				display: true,
 				gridLines: {
 					display: false
+				},
+				ticks: {
+					fontColor: '#000'
+					
 				}
 			}],
 			yAxes: [{
 				display: false,
 				ticks: {
 					min: 0,
-					max: roundToThousand,
-					stepSize: 1000
+					max: roundMaxNumberToHigher,
+					stepSize: 1000,
 				}
 			}]
 		},
@@ -99,9 +103,15 @@ function updateData(years, age) {
 	let labels = forThePastNYears.periodKeys;
 
 	let maxNumberFromData = Math.max(...data);
-	let roundToThousand = Math.ceil(maxNumberFromData / 1000) * 1000;
-	if (roundToThousand - maxNumberFromData < 500) {
-		roundToThousand += 500;
+	let roundMaxNumberToHigher = Math.ceil(maxNumberFromData / 1000) * 1000;
+	if (maxNumberFromData < 1000) {
+		roundMaxNumberToHigher = maxNumberFromData + 150;
+	} else {
+		if (roundMaxNumberToHigher - maxNumberFromData > 500) {
+			roundMaxNumberToHigher -= 500;
+		} else if (roundMaxNumberToHigher - maxNumberFromData < 200) {
+			roundMaxNumberToHigher += 200;
+		}
 	}
 
 	data.unshift('');
@@ -114,19 +124,20 @@ function updateData(years, age) {
 	return {
 		data,
 		labels,
-		roundToThousand
+		roundMaxNumberToHigher
 	};
 }
 
 function updateChart (years, age) {
 	updatedData = updateData(years, age);
+
 	let data = updatedData.data;
 	let labels = updatedData.labels;
-	let roundToThousand = updatedData.roundToThousand;
+	let roundMaxNumberToHigher = updatedData.roundMaxNumberToHigher;
 
 	chart.data.datasets[0].data = data;
 	chart.data.labels = labels;
-	chart.options.scales.yAxes[0].ticks.max = roundToThousand;
+	chart.options.scales.yAxes[0].ticks.max = roundMaxNumberToHigher;
 
 	chart.update();
 }

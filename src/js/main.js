@@ -71,16 +71,18 @@ $(document).ready(() => {
         	fireworks.saveData(data);
         	fireworks.savePastYearsByTotalAmountOfViolations(fireworkConstants.initialPastYears);
         	fireworks.savePastyearsByAge(fireworkConstants.initialPastYears);
-        	fireworks.saveAge(fireworkConstants.initialSelectedAge);
+        	fireworks.saveCurrentAge(fireworkConstants.initialSelectedAge);
         	console.log(data);
         }
     }).done(() => {
     	let totalAmountOfViolationsPastYears = fireworks.getPastYearsByTotalAmountOfViolations();
     	let byAgePastYears = fireworks.getPastYearsByAge();
     	let selectedAge = fireworks.getCurrentAge();
+    	let ages = ageConstants.get();
 
     	animateAmountOfViolationsBasedOnPastYears(totalAmountOfViolationsPastYears);
-    	chart.initializeChart();
+    	chart.initializeChart(ages);
+    	generateChartFilterOptions(ages);
     });
 
     $('#total-number-of-violations .change-years a').click((e) => {
@@ -161,4 +163,50 @@ function animateAmountOfViolationsBasedOnPastYears (years) {
 	};
 
 	let animation = anime(animationOptions);
+}
+
+function generateChartFilterOptions (ages) {
+	let wrapper = $('#change-age .wrapper');
+	for (let age in ages) {
+		if (age !== 'other' && age !== 'total') {
+			age = parseInt(age);
+
+			let optionWrapper = $('<div></div>');
+			let optionText = $(`<span class="years-old">${age}<span>`);
+    		let selectedAge = fireworks.getCurrentAge();
+
+			optionWrapper
+				.addClass('col-lg-2')
+				.addClass('col-6')
+				.addClass('option')
+				.addClass('d-flex')
+				.addClass('align-items-center')
+				.addClass('justify-content-center')
+				.addClass('h-100');
+
+			if (age === selectedAge) {
+				optionWrapper.addClass('active');
+			}
+
+			optionWrapper
+				.append(optionText)
+				.append(' years old');
+			wrapper.append(optionWrapper);
+
+		    optionWrapper.click((e) => changeAge(e));
+		}
+	}
+}
+
+function changeAge (e) {
+	let option = $(e.currentTarget);
+	let age = parseInt(option.find('.years-old').text());
+	
+	$('#change-age .option').removeClass('active');
+	option.addClass('active');
+
+	let byAgePastYears = fireworks.getPastYearsByAge();
+
+	fireworks.saveCurrentAge(age);
+	chart.updateChart(byAgePastYears, age);
 }

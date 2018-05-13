@@ -16,7 +16,7 @@ function saveData (data) {
 	fireworks = data;
 }
 
-function saveAge (age) {
+function saveCurrentAge (age) {
 	selectedAge = age;
 }
 
@@ -70,8 +70,26 @@ function forThePastNYears (years, age) {
 		let ageValue = parseInt(firework[fireworkConstants.keys.age]);
 		let genderValue = parseInt(firework[fireworkConstants.keys.sex]);
 		let ethnicityValue = parseInt(firework[fireworkConstants.keys.ethnicity]);
+		let ages = ageConstants.get();
 
-		if (ageValue === ages.total || ageValue === age) {
+		if (age !== undefined) {
+			if (ageValue === ages[age]) {
+				if (genderValue === genders.total) {
+	                if (ethnicityValue === ethnicities.total) {
+	                	let fireworkPeriod = firework[fireworkConstants.keys.period];
+	                	let isInPeriodRange = periodsArray.indexOf(fireworkPeriod);
+	                	if (isInPeriodRange > -1) {
+		                    var currentNumberOfViolations = firework[fireworkConstants.keys.fireworks];
+		                    violationsByYears.push(currentNumberOfViolations);
+
+		                    numberOfViolations += currentNumberOfViolations;
+
+					        counter += 1;
+	                	}
+	                }
+	            }
+			}
+		} else if (ageValue === ages.total) {
             if (genderValue === genders.total) {
                 if (ethnicityValue === ethnicities.total) {
                 	let fireworkPeriod = firework[fireworkConstants.keys.period];
@@ -98,7 +116,7 @@ function forThePastNYears (years, age) {
 
 export {
 	saveData,
-	saveAge,
+	saveCurrentAge,
 	getCurrentAge,
 	savePastYearsByTotalAmountOfViolations,
 	getPastYearsByTotalAmountOfViolations,
