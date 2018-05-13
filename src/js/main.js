@@ -5,6 +5,7 @@ import 'bootstrap';
 import Chart from 'chart.js';
 
 import * as header from './modules/header';
+import * as chart from './modules/chart';
 import * as particles from './modules/particles';
 import * as fireworks from './data/fireworks';
 
@@ -68,25 +69,36 @@ $(document).ready(() => {
         	data = data.value;
 
         	fireworks.saveData(data);
+        	fireworks.savePastYearsByTotalAmountOfViolations(fireworkConstants.initialPastYears);
+        	fireworks.savePastyearsByAge(fireworkConstants.initialPastYears);
+        	fireworks.saveAge(fireworkConstants.initialSelectedAge);
         	console.log(data);
         }
     }).done(() => {
-    	animateAmountOfViolationsBasedOnPastYears(fireworkConstants.initialPassedYears);
+    	let totalAmountOfViolationsPastYears = fireworks.getPastYearsByTotalAmountOfViolations();
+    	let byAgePastYears = fireworks.getPastYearsByAge();
+    	let selectedAge = fireworks.getCurrentAge();
+
+    	animateAmountOfViolationsBasedOnPastYears(totalAmountOfViolationsPastYears);
+    	chart.initializeChart();
     });
 
     $('#total-number-of-violations .change-years a').click((e) => {
-    	e.preventDefault();
+    	let selectedAmountOfPastYears = changeValueOfPastYearsButton(e);
+    	fireworks.savePastYearsByTotalAmountOfViolations(selectedAmountOfPastYears);
 
-    	let element = $(e.currentTarget);
-    	let selectedAmountOfPassedYears = element.attr('data-value');
-    	$('#total-number-of-violations .amount-of-years').text(selectedAmountOfPassedYears);
+    	let totalAmountOfViolationsPastYears = fireworks.getPastYearsByTotalAmountOfViolations();
+    	animateAmountOfViolationsBasedOnPastYears(totalAmountOfViolationsPastYears);
+    });
 
-    	let parent = element.parent();
-    	parent.find('a').removeClass('active');
-		
-		element.addClass('active');
-    	animateAmountOfViolationsBasedOnPastYears(selectedAmountOfPassedYears);
-    })
+    $('#by-age .change-years a').click((e) => {
+    	let selectedAmountOfPastYears = changeValueOfPastYearsButton(e);
+    	fireworks.savePastyearsByAge(selectedAmountOfPastYears);
+
+    	let byAgePastYears = fireworks.getPastYearsByAge();
+    	let selectedAge = fireworks.getCurrentAge();
+    	chart.updateChart(byAgePastYears, selectedAge);
+    });
 
 	header.initialize();
 	
@@ -111,60 +123,28 @@ $(document).ready(() => {
 			particles.animate(fireworkParticles);
 		}
 	});
-
-	let ctx = $('#by-age-chart')[0].getContext('2d');
-	let myLineChart = new Chart(ctx, {
-		type: 'line',
-		data: {
-			labels: ['', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', ''],
-		    datasets: [{
-		        data: [0, 5210, 4170, 3510, 2630, 2230, 1930, 1970, 1880, 1550, 1170, 0],
-		        label: '',
-		        xAxisID: '',
-		        yAxisID: '',
-		        spanGaps: false,
-		        steppedLine: false,
-		        backgroundColor: 'transparent',
-		        pointRadius: 7,
-		        pointBackgroundColor: '#c3d4db',
-		        pointBorderWidth: 0,
-		        pointBorderColor: '#c3d4db',
-		        pointHoverRadius: 10,
-		        pointHoverBackgroundColor: '#e52941',
-		        pointHoverBorderColor: '#e52941',
-		        borderColor: '#c3d4db',
-		        borderWidth: 4
-		    }]
-		},
-		options: {
-			legend: {
-				display: false,
-			},
-			scales: {
-				xAxes: [{
-					display: true,
-					gridLines: {
-						display: false,
-					}
-				}],
-				yAxes: [{
-					display: false,
-					ticks: {
-						max: 6000,
-						min: 0
-					}
-				}]
-			}
-		}
-	});
-
-	console.log(myLineChart)
 });
+
+function changeValueOfPastYearsButton (e) {
+	e.preventDefault();
+
+	let element = $(e.currentTarget);
+	let selectedAmountOfPastYears = element.attr('data-value');
+	$(element).parent().parent().parent().find('.amount-of-years').text(selectedAmountOfPastYears);
+
+	let parent = element.parent();
+	parent.find('a').removeClass('active');
+	
+	element.addClass('active');
+
+	return selectedAmountOfPastYears;
+}
 
 function animateAmountOfViolationsBasedOnPastYears (years) {
 	let heading = $('#total-number-of-violations-heading');
 	let headingText = parseInt(heading.text());
-	let totalAmountOfViolations = fireworks.forThePastNYears(years);
+	let forThePastNYears = fireworks.forThePastNYears(years);
+	let totalAmountOfViolations = forThePastNYears.numberOfViolations;
 	let initialAmount = {
 		value: headingText
 	};

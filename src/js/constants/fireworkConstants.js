@@ -1,6 +1,7 @@
 'use strict';
 
-const initialPassedYears = 10;
+const initialPastYears = 10;
+const initialSelectedAge = 13;
 const keys = {
 	age: 'Leeftijd',
 	sex: 'Geslacht',
@@ -10,6 +11,7 @@ const keys = {
 };
 
 export {
-	initialPassedYears,
+	initialPastYears,
+	initialSelectedAge,
 	keys
 };
