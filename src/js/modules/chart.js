@@ -6,7 +6,13 @@ let chart = {};
 let ctx = {};
 let options = {};
 let updatedData = {};
+let chartTarget = '';
 
+/**
+ * @function
+ * @name initializeChart
+ * @description Initialize the chart (using ChartJS).
+ */
 function initializeChart () {
 	let years = fireworks.getPastYearsByAge();
 	let age = fireworks.getCurrentAge();
@@ -16,7 +22,8 @@ function initializeChart () {
 	let labels = updatedData.labels;
 	let roundMaxNumberToHigher = updatedData.roundMaxNumberToHigher;
 
-	ctx = $('#by-age-chart')[0].getContext('2d');
+	chartTarget = $('#by-age-chart');
+	ctx = chartTarget[0].getContext('2d');
 	options = {
 		legend: {
 			display: false
@@ -94,9 +101,19 @@ function initializeChart () {
 		options: options
 	});
 
-	console.log(chart)
+	chart.stop();
 }
 
+/**
+ * @function
+ * @name updateData
+ * @param { Number } years - The amount of past years.
+ * @param { Number } age - The new age group.
+ * @return { Object } The new data that has to be displayed.
+ * @return { Array } The new labels that need to be displayed.
+ * @return { Number } The max number until which the chart should visualize the data.
+ * @description Change the data for the chart based on user input.
+ */
 function updateData(years, age) {
 	let forThePastNYears = fireworks.forThePastNYears(years, age);
 	let data = forThePastNYears.violationsByYears;
@@ -128,6 +145,13 @@ function updateData(years, age) {
 	};
 }
 
+/**
+ * @function
+ * @name updateChart
+ * @param { Number } years - The amount of past years.
+ * @param { Number } age - The new age.
+ * @description Update the chart visually after receiving new data from the `updateData` function.
+ */
 function updateChart (years, age) {
 	updatedData = updateData(years, age);
 
@@ -142,8 +166,78 @@ function updateChart (years, age) {
 	chart.update();
 }
 
+/**
+ * @function
+ * @name generateFilterOptions
+ * @param { Number } age - The new age.
+ * @description Generate the filter options - the different ages below the chart.
+ */
+function generateFilterOptions (ages) {
+	let wrapper = $('#change-age .wrapper');
+	for (let age in ages) {
+		if (age !== 'other' && age !== 'total') {
+			age = parseInt(age);
+
+			let optionWrapper = $('<div></div>');
+			let optionText = $(`<span class="years-old">${age}<span>`);
+    		let selectedAge = fireworks.getCurrentAge();
+
+			optionWrapper
+				.addClass('col-lg-2')
+				.addClass('col-6')
+				.addClass('option')
+				.addClass('d-flex')
+				.addClass('align-items-center')
+				.addClass('justify-content-center')
+				.addClass('h-100');
+
+			if (age === selectedAge) {
+				optionWrapper.addClass('active');
+			}
+
+			optionWrapper
+				.append(optionText)
+				.append('&nbsp;years old');
+			wrapper.append(optionWrapper);
+
+		    optionWrapper.click((e) => changeAge(e));
+		}
+	}
+}
+
+/**
+ * @function
+ * @name changeAge
+ * @param { Object } e - The clicked item.
+ * @description Based on user input, change the content of the chart filtered by the selected age group.
+ */
+function changeAge (e) {
+	let option = $(e.currentTarget);
+	let age = parseInt(option.find('.years-old').text());
+	
+	$('#change-age .option').removeClass('active');
+	option.addClass('active');
+
+	let byAgePastYears = fireworks.getPastYearsByAge();
+
+	fireworks.saveCurrentAge(age);
+	updateChart(byAgePastYears, age);
+}
+
+/**
+ * @function
+ * @name render
+ * @description Render the chart.
+ */
+function render () {
+	chart.render();
+
+	chartTarget.addClass('rendering');
+}
+
 export {
 	initializeChart,
-	updateData,
-	updateChart
+	updateChart,
+	generateFilterOptions,
+	render
 };

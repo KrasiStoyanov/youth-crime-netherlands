@@ -12,34 +12,82 @@ let totalAmountOfViolationsPastYears = 0;
 let byAgePastYears = 0;
 let totalNumberOfViolations = 0;
 
+/**
+ * @function
+ * @name saveData
+ * @description Save the whole data JSON.
+ */
 function saveData (data) {
 	fireworks = data;
 }
 
+/**
+ * @function
+ * @name saveCurrentAge
+ * @description Save the selected age group.
+ */
 function saveCurrentAge (age) {
 	selectedAge = age;
 }
 
+/**
+ * @function
+ * @name getCurrentAge
+ * @return { Number } selectedAge - The current selected age.
+ * @description Get the current selected age.
+ */
 function getCurrentAge () {
 	return selectedAge;
 }
 
+/**
+ * @function
+ * @name savePastYearsByTotalAmountOfViolations
+ * @description Save the selected amount of past years by total amount of violations.
+ */
 function savePastYearsByTotalAmountOfViolations (years) {
 	totalAmountOfViolationsPastYears = years;
 }
 
+/**
+ * @function
+ * @name getPastYearsByTotalAmountOfViolations
+ * @return { Number } totalAmountOfViolationsPastYears - The current amount of past years by total amount of violations.
+ * @description Get the current amount of past years by total amount of violations.
+ */
 function getPastYearsByTotalAmountOfViolations () {
 	return totalAmountOfViolationsPastYears;
 }
 
+/**
+ * @function
+ * @name savePastyearsByAge
+ * @description Save the selected amount of past years by age group.
+ */
 function savePastyearsByAge (years) {
 	byAgePastYears = years;
 }
 
+/**
+ * @function
+ * @name getPastYearsByAge
+ * @return { Number } byAgePastYears - The current past years by age.
+ * @description Get the current past years by age group.
+ */
 function getPastYearsByAge () {
 	return byAgePastYears;
 }
 
+/**
+ * @function
+ * @name forThePastNYears
+ * @param { Number } years - The amount of past years.
+ * @param { Number } age - The new age group.
+ * @return { Number } numberOfViolations - The total number of violations.
+ * @return { Array } periodKeys - The period keys/years.
+ * @return { Array } violationsByYears - The violations by years.
+ * @description Get new data based on user input.
+ */
 function forThePastNYears (years, age) {
 	let ages = ageConstants.get();
 	let genders = genderConstants.get();

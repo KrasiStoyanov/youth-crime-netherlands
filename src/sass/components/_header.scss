@@ -1,5 +1,7 @@
 #header {
 	position: relative;
+	transition: opacity .3s ease-in-out, visibility .3s ease-in-out;
+	z-index: 1;
 	
 	#background-waves {
 		position: absolute;

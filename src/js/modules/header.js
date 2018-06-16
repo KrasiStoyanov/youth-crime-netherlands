@@ -2,37 +2,31 @@
 
 import * as headerConstants from '../constants/headerConstants';
 
+/**
+ * @function
+ * @name initialize
+ * @description Initialize the header by calling the needed functions, also when the window size changes.
+ */
 function initialize () {
 	positionBackgroundWaves();
-	calculateHeightOfHeader();
 
 	$(window).resize(() => {
 		positionBackgroundWaves();
-		calculateHeightOfHeader();
 	});
 }
 
+/**
+ * @function
+ * @name positionBackgroundWaves
+ * @description Position the wave background effect correctly based on the dimensions of the window.
+ */
 function positionBackgroundWaves () {
 	let backgroundWaves = $('#header #background-waves');
-	let documentTop = 0;
-	let bottomOfBackgroundWaves = documentTop + backgroundWaves.outerHeight(true);
+	let bottomOfBackgroundWaves = backgroundWaves.outerHeight(true);
 	let maxHeightOfBackgroundWavesCalculation = bottomOfBackgroundWaves - headerConstants.maxHeightOfBackgroundWaves;
 
 	maxHeightOfBackgroundWavesCalculation = maxHeightOfBackgroundWavesCalculation > 0 ? -maxHeightOfBackgroundWavesCalculation : maxHeightOfBackgroundWavesCalculation * -1;
 	backgroundWaves.css('top', maxHeightOfBackgroundWavesCalculation);
-}
-
-function calculateHeightOfHeader() {
-	let header = $('#header');
-	let backgroundWaves = header.find('#background-waves');
-	let topOfBackgroundWaves = backgroundWaves.offset().top;
-	let heightOfBackgroundWaves = backgroundWaves.outerHeight(true);
-	let documentTop = 0;
-
-	topOfBackgroundWaves = topOfBackgroundWaves > 0 ? -topOfBackgroundWaves : topOfBackgroundWaves * -1;
-	let bottomOfBackgroundWaves = documentTop - topOfBackgroundWaves + heightOfBackgroundWaves;
-
-	header.height(bottomOfBackgroundWaves);
 }
 
 export {

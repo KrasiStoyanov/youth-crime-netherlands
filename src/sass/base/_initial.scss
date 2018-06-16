@@ -8,3 +8,8 @@ body {
 	flex-direction: column;
 	position: relative;
 }
+
+.hidden {
+	opacity: 0;
+	visibility: hidden;
+}

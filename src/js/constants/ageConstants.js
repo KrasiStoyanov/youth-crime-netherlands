@@ -1,6 +1,13 @@
 'use strict';
 
 let ages = {};
+
+/**
+ * @function
+ * @name save
+ * @param { Object } data - The data JSON.
+ * @description Save the data JSON.
+ */
 function save (data) {
 	data.map((age, index) => {
 		let key = age.Title;
@@ -23,6 +30,12 @@ function save (data) {
 	});
 }
 
+/**
+ * @function
+ * @name get
+ * @return { Object } The data JSON.
+ * @description Get the data JSON.
+ */
 function get () {
 	return ages;
 }

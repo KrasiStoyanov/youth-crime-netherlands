@@ -4,129 +4,255 @@ import anime from 'animejs';
 import 'bootstrap';
 import Chart from 'chart.js';
 
-import * as header from './modules/header';
 import * as chart from './modules/chart';
+import * as header from './modules/header';
+import * as loading from './modules/loading';
 import * as particles from './modules/particles';
 import * as fireworks from './data/fireworks';
 
-import * as particleConstants from './constants/particleConstants';
 import * as fireworkConstants from './constants/fireworkConstants';
 import * as ageConstants from './constants/ageConstants';
 import * as genderConstants from './constants/genderConstants';
 import * as ethnicityConstants from './constants/ethnicityConstants';
 import * as periodConstants from './constants/periodConstants';
 
+/**
+ * @description Scroll to the top of the page, whenever it loads.
+ */
+window.onbeforeunload = () => {
+	window.scrollTo(0, 0);
+};
+
 $(document).ready(() => {
-	$.ajax({
-		type: 'GET',
-		dataType: 'json',
-		url: 'https://opendata.cbs.nl/ODataApi/odata/71930ned/Leeftijd',
-		success: (data) => {
-			data = data.value;
+	$('body').css('overflow', 'hidden');
 
-			ageConstants.save(data);
-		}
+	let loadingPromise = new Promise((resolve, reject) => {
+		loading.initialize(resolve, reject);
 	});
 
-	$.ajax({
-		type: 'GET',
-		dataType: 'json',
-		url: 'https://opendata.cbs.nl/ODataApi/odata/71930ned/Geslacht',
-		success: (data) => {
-			data = data.value;
+	let ageConstantsPromise = new Promise((resolve, reject) => {
+		$.ajax({
+			type: 'GET',
+			dataType: 'json',
+			url: 'https://opendata.cbs.nl/ODataApi/odata/71930ned/Leeftijd',
+			success: (data) => {
+				data = data.value;
 
-			genderConstants.save(data);
-		}
+				ageConstants.save(data);
+				resolve();
+			}
+		});
 	});
 
-	$.ajax({
-		type: 'GET',
-		dataType: 'json',
-		url: 'https://opendata.cbs.nl/ODataApi/odata/71930ned/Herkomstgroeperingen',
-		success: (data) => {
-			data = data.value;
+	let genderConstantsPromise = new Promise((resolve, reject) => {
+		$.ajax({
+			type: 'GET',
+			dataType: 'json',
+			url: 'https://opendata.cbs.nl/ODataApi/odata/71930ned/Geslacht',
+			success: (data) => {
+				data = data.value;
 
-			ethnicityConstants.save(data);
-		}
+				genderConstants.save(data);
+				resolve();
+			}
+		});
 	});
-
-	$.ajax({
-		type: 'GET',
-		dataType: 'json',
-		url: 'http://opendata.cbs.nl/ODataApi/odata/71930ned/Perioden',
-		success: (data) => {
-			data = data.value;
-
-			periodConstants.save(data);
-		}
-	});
-
-	$.ajax({
-        type: 'GET',
-        dataType: 'json',
-        url: 'https://opendata.cbs.nl/ODataApi/odata/71930ned/TypedDataSet',
-        success: (data) => {
-        	data = data.value;
-
-        	fireworks.saveData(data);
-        	fireworks.savePastYearsByTotalAmountOfViolations(fireworkConstants.initialPastYears);
-        	fireworks.savePastyearsByAge(fireworkConstants.initialPastYears);
-        	fireworks.saveCurrentAge(fireworkConstants.initialSelectedAge);
-        	console.log(data);
-        }
-    }).done(() => {
-    	let totalAmountOfViolationsPastYears = fireworks.getPastYearsByTotalAmountOfViolations();
-    	let byAgePastYears = fireworks.getPastYearsByAge();
-    	let selectedAge = fireworks.getCurrentAge();
-    	let ages = ageConstants.get();
-
-    	animateAmountOfViolationsBasedOnPastYears(totalAmountOfViolationsPastYears);
-    	chart.initializeChart(ages);
-    	generateChartFilterOptions(ages);
-    });
-
-    $('#total-number-of-violations .change-years a').click((e) => {
-    	let selectedAmountOfPastYears = changeValueOfPastYearsButton(e);
-    	fireworks.savePastYearsByTotalAmountOfViolations(selectedAmountOfPastYears);
-
-    	let totalAmountOfViolationsPastYears = fireworks.getPastYearsByTotalAmountOfViolations();
-    	animateAmountOfViolationsBasedOnPastYears(totalAmountOfViolationsPastYears);
-    });
-
-    $('#by-age .change-years a').click((e) => {
-    	let selectedAmountOfPastYears = changeValueOfPastYearsButton(e);
-    	fireworks.savePastyearsByAge(selectedAmountOfPastYears);
-
-    	let byAgePastYears = fireworks.getPastYearsByAge();
-    	let selectedAge = fireworks.getCurrentAge();
-    	chart.updateChart(byAgePastYears, selectedAge);
-    });
-
-	header.initialize();
 	
-	// Particles
-	let headerParticles = $('#particles-header .particles .particle').get();
-	particles.animate(headerParticles);
+	let ethnicityConstantsPromise = new Promise((resolve, reject) => {
+			$.ajax({
+				type: 'GET',
+				dataType: 'json',
+				url: 'https://opendata.cbs.nl/ODataApi/odata/71930ned/Herkomstgroeperingen',
+				success: (data) => {
+					data = data.value;
 
-	let path = anime.path('#firework-path #path path');
-	let fireworkParticles = $('#firework-particles .particles .particle').get();
+					ethnicityConstants.save(data);
+				resolve();
+				}
+			});
+	});
 
-	let motionPath = anime({
-		targets: '#firework-path #firework',
-		translateX: path('x'),
-		translateY: path('y'),
-		scale: [0, 1],
-		opacity: [0, 1],
-		rotate: path('angle'),
-		easing: 'easeInOutQuart',
-		duration: 3000,
-		loop: false,
-		complete: () => {
-			particles.animate(fireworkParticles);
-		}
+	let periodConstantsPromise = new Promise((resolve, reject) => {
+		$.ajax({
+			type: 'GET',
+			dataType: 'json',
+			url: 'http://opendata.cbs.nl/ODataApi/odata/71930ned/Perioden',
+			success: (data) => {
+				data = data.value;
+
+				periodConstants.save(data);
+				loading.pause();
+
+				resolve();
+			}
+		});
+	});
+
+	let dataPromise = new Promise((resolve, reject) => {
+		$.ajax({
+	        type: 'GET',
+	        dataType: 'json',
+	        url: 'https://opendata.cbs.nl/ODataApi/odata/71930ned/TypedDataSet',
+	        success: (data) => {
+	        	data = data.value;
+
+	        	fireworks.saveData(data);
+	        	fireworks.savePastYearsByTotalAmountOfViolations(fireworkConstants.initialPastYears);
+	        	fireworks.savePastyearsByAge(fireworkConstants.initialPastYears);
+	        	fireworks.saveCurrentAge(fireworkConstants.initialSelectedAge);
+
+				resolve();
+	        }
+	    });
+	});
+	
+	/**
+	 * @description After every AJAX call is done - initialize loading screen and show infographic content.
+	 */
+	Promise.all([ageConstantsPromise, genderConstantsPromise, ethnicityConstantsPromise, periodConstantsPromise, dataPromise]).then((values) => {
+		loading.play();
+
+		/**
+		 * @description After the loading is done - show infographic content.
+		 */
+		loadingPromise.then(() => {
+			/**
+			 * @description Initialize the data and the header animation.
+			 */
+			let totalAmountOfViolationsPastYears = fireworks.getPastYearsByTotalAmountOfViolations();
+			let byAgePastYears = fireworks.getPastYearsByAge();
+			let selectedAge = fireworks.getCurrentAge();
+			let ages = ageConstants.get();
+
+			let headerParticles = $('#particles-header .particles .particle').get();
+			header.initialize();
+			particles.animate(headerParticles);
+
+			/**
+			 * @description Initialize the animation for the total amount of violations rocket.
+			 */
+			let path = anime.path('#firework-path #path path');
+			let fireworkParticles = $('#firework-particles .particles .particle').get();
+			let totalNumberOfViolationsMotionPath = anime({
+				targets: '#firework-path #firework',
+				translateX: path('x'),
+				translateY: path('y'),
+				scale: [0, 1],
+				opacity: [0, 1],
+				rotate: path('angle'),
+				easing: 'easeInOutQuart',
+				duration: 3000,
+				loop: false,
+				complete: () => {
+					particles.animate(fireworkParticles);
+				}
+			});
+
+			totalNumberOfViolationsMotionPath.pause();
+
+			/**
+			 * @description Check if the element is visible in the viewport and based on the result show it.
+			 */
+			let totalNumberOfViolationsHeading = $('#total-number-of-violations-heading');
+			let isTotalNumberOfViolationsHeadingVisible = checkIfVisible(totalNumberOfViolationsHeading, 'counting');
+			if (totalNumberOfViolationsHeading.hasClass('counting') === false) {
+				let isTotalNumberOfViolationsHeadingVisible = checkIfVisible(totalNumberOfViolationsHeading);
+				if (isTotalNumberOfViolationsHeadingVisible) {
+					animateAmountOfViolationsBasedOnPastYears(totalAmountOfViolationsPastYears);
+
+					totalNumberOfViolationsMotionPath.play();
+				}
+			}
+
+			$(window).scroll(() => {
+				if (totalNumberOfViolationsHeading.hasClass('counting') === false) {
+					let isTotalNumberOfViolationsHeadingVisible = checkIfVisible(totalNumberOfViolationsHeading);
+					if (isTotalNumberOfViolationsHeadingVisible) {
+						animateAmountOfViolationsBasedOnPastYears(totalAmountOfViolationsPastYears);
+
+						totalNumberOfViolationsMotionPath.play();
+					}
+				}
+			});
+
+			chart.initializeChart(ages);
+			chart.generateFilterOptions(ages);
+
+			/**
+			 * @description Check if the element is visible in the viewport and based on the result show it.
+			 */
+			let byAge = $('#by-age-chart');
+			if (byAge.hasClass('rendering') === false) {
+				let isByAgeVisible = checkIfVisible(byAge);
+				if (isByAgeVisible) {
+					chart.render();
+				}
+			}
+
+			$(window).scroll(() => {
+				if (byAge.hasClass('rendering') === false) {
+					let isByAgeVisible = checkIfVisible(byAge);
+					if (isByAgeVisible) {
+						chart.render();
+					}
+				}
+			});
+
+			/**
+			 * @description Change years for the total amount of violations.
+			 */
+		    $('#total-number-of-violations .change-years a').click((e) => {
+		    	let selectedAmountOfPastYears = changeValueOfPastYearsButton(e);
+		    	fireworks.savePastYearsByTotalAmountOfViolations(selectedAmountOfPastYears);
+
+		    	let totalAmountOfViolationsPastYears = fireworks.getPastYearsByTotalAmountOfViolations();
+		    	animateAmountOfViolationsBasedOnPastYears(totalAmountOfViolationsPastYears);
+		    });
+			
+			/**
+			 * @description Change years for the chart.
+			 */
+		    $('#by-age .change-years a').click((e) => {
+		    	let selectedAmountOfPastYears = changeValueOfPastYearsButton(e);
+		    	fireworks.savePastyearsByAge(selectedAmountOfPastYears);
+
+		    	let byAgePastYears = fireworks.getPastYearsByAge();
+		    	let selectedAge = fireworks.getCurrentAge();
+		    	chart.updateChart(byAgePastYears, selectedAge);
+		    });
+		});
 	});
 });
 
+/**
+ * @function
+ * @name checkIfVisible
+ * @param { Object } element - The element to chech.
+ * @return { Boolean } If the element is visible in the viewport.
+ * @description Check if the provided element is visible in the viewport.
+ */
+function checkIfVisible (element) {
+	let scrollTop = $(window).scrollTop();
+	let heightOfScreen = $(window).outerHeight();
+	let screenBottomScroll = scrollTop + heightOfScreen;
+
+	let totalNumberOfViolationsTop = $(element).offset().top;
+	scrollTop = $(window).scrollTop();
+	screenBottomScroll = scrollTop + heightOfScreen;
+	if (screenBottomScroll >= totalNumberOfViolationsTop + 100) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * @function
+ * @name changeValueOfPastYearsButton
+ * @param { Object } e - The clicked item.
+ * @return { Object } The selected amount of past years.
+ * @description Change the value of the amount of years that have passed.
+ */
 function changeValueOfPastYearsButton (e) {
 	e.preventDefault();
 
@@ -142,6 +268,12 @@ function changeValueOfPastYearsButton (e) {
 	return selectedAmountOfPastYears;
 }
 
+/**
+ * @function
+ * @name animateAmountOfViolationsBasedOnPastYears
+ * @param { Number } years - The amount of past years.
+ * @description Animate the amount of violations for the past years.
+ */
 function animateAmountOfViolationsBasedOnPastYears (years) {
 	let heading = $('#total-number-of-violations-heading');
 	let headingText = parseInt(heading.text());
@@ -150,6 +282,8 @@ function animateAmountOfViolationsBasedOnPastYears (years) {
 	let initialAmount = {
 		value: headingText
 	};
+
+	heading.addClass('counting');
 
 	let animationOptions = {
 		targets: initialAmount,
@@ -163,50 +297,4 @@ function animateAmountOfViolationsBasedOnPastYears (years) {
 	};
 
 	let animation = anime(animationOptions);
-}
-
-function generateChartFilterOptions (ages) {
-	let wrapper = $('#change-age .wrapper');
-	for (let age in ages) {
-		if (age !== 'other' && age !== 'total') {
-			age = parseInt(age);
-
-			let optionWrapper = $('<div></div>');
-			let optionText = $(`<span class="years-old">${age}<span>`);
-    		let selectedAge = fireworks.getCurrentAge();
-
-			optionWrapper
-				.addClass('col-lg-2')
-				.addClass('col-6')
-				.addClass('option')
-				.addClass('d-flex')
-				.addClass('align-items-center')
-				.addClass('justify-content-center')
-				.addClass('h-100');
-
-			if (age === selectedAge) {
-				optionWrapper.addClass('active');
-			}
-
-			optionWrapper
-				.append(optionText)
-				.append(' years old');
-			wrapper.append(optionWrapper);
-
-		    optionWrapper.click((e) => changeAge(e));
-		}
-	}
-}
-
-function changeAge (e) {
-	let option = $(e.currentTarget);
-	let age = parseInt(option.find('.years-old').text());
-	
-	$('#change-age .option').removeClass('active');
-	option.addClass('active');
-
-	let byAgePastYears = fireworks.getPastYearsByAge();
-
-	fireworks.saveCurrentAge(age);
-	chart.updateChart(byAgePastYears, age);
 }

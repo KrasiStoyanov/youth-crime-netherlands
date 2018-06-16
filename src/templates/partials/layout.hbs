@@ -10,9 +10,10 @@
 </head>
 
 <body>
+    {{> loading}}
     {{> header}}
 	
-	<div id="content-wrapper">
+	<div id="content-wrapper" class="hidden">
 	    {{#block 'body'}}
 	    {{/block}}
 	</div>

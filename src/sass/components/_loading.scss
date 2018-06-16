@@ -1,0 +1,23 @@
+#loading {
+	height: 100vh;
+	overflow: hidden;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+
+	#burning-illustration {
+		position: absolute;
+		top: -20px;
+		left: -22px;
+	}
+
+	#rocket-path {
+		position: absolute;
+		top: 0;
+		right: 0;
+		left: 0;
+		margin: auto;
+	}
+}

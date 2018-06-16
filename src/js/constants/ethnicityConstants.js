@@ -1,6 +1,13 @@
 'use strict';
 
 let ethnicities = {};
+
+/**
+ * @function
+ * @name save
+ * @param { Object } data - The ethnicity constants.
+ * @description Save the ethnicity constants.
+ */
 function save (data) {
 	data.map((ethnicity, index) => {
 		let key = ethnicity.Title;
@@ -19,6 +26,12 @@ function save (data) {
 	});
 }
 
+/**
+ * @function
+ * @name get
+ * @return { Object } The ethnicity constants.
+ * @description Get the ethnicity constants.
+ */
 function get () {
 	return ethnicities;
 }
