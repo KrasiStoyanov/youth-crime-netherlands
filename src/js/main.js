@@ -30,6 +30,12 @@ $(document).ready(() => {
 		loading.initialize(resolve, reject);
 	});
 
+	$('#scroll-down').click(() => {
+		let totalNumberOfViolationsTop = $('#total-number-of-violations').offset().top;
+		console.log(totalNumberOfViolationsTop)
+		$('html, body').animate({ scrollTop: totalNumberOfViolationsTop }, 300, 'swing');
+	});
+
 	let ageConstantsPromise = new Promise((resolve, reject) => {
 		$.ajax({
 			type: 'GET',
