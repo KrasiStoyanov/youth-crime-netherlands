@@ -32,7 +32,6 @@ $(document).ready(() => {
 
 	$('#scroll-down').click(() => {
 		let totalNumberOfViolationsTop = $('#total-number-of-violations').offset().top;
-		console.log(totalNumberOfViolationsTop)
 		$('html, body').animate({ scrollTop: totalNumberOfViolationsTop }, 300, 'swing');
 	});
 
@@ -116,20 +115,20 @@ $(document).ready(() => {
 	 * @description After every AJAX call is done - initialize loading screen and show infographic content.
 	 */
 	Promise.all([ageConstantsPromise, genderConstantsPromise, ethnicityConstantsPromise, periodConstantsPromise, dataPromise]).then((values) => {
+		/**
+		 * @description Initialize the data and the header animation.
+		 */
+		let totalAmountOfViolationsPastYears = fireworks.getPastYearsByTotalAmountOfViolations();
+		let byAgePastYears = fireworks.getPastYearsByAge();
+		let selectedAge = fireworks.getCurrentAge();
+		let ages = ageConstants.get();
+
 		loading.play();
 
 		/**
 		 * @description After the loading is done - show infographic content.
 		 */
 		loadingPromise.then(() => {
-			/**
-			 * @description Initialize the data and the header animation.
-			 */
-			let totalAmountOfViolationsPastYears = fireworks.getPastYearsByTotalAmountOfViolations();
-			let byAgePastYears = fireworks.getPastYearsByAge();
-			let selectedAge = fireworks.getCurrentAge();
-			let ages = ageConstants.get();
-
 			let headerParticles = $('#particles-header .particles .particle').get();
 			header.initialize();
 			particles.animate(headerParticles);
